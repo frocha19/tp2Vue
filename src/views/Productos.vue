@@ -64,6 +64,7 @@ export default {
   data() {
     return {
       instrumentosData: [],
+      ids: [],
       loading: true
     };
   },

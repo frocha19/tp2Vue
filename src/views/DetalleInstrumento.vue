@@ -3,14 +3,14 @@
     <app-loading v-if="loading"></app-loading>
     <b-container v-if="!loading" class="mt-5 tarjeta animated fadeIn">
       <b-row>
-        <b-col>
+        <b-col class="mt-2">
           <img
             :src="'/images/' + instrumentoEncontrado.imagen"
             width="80%"
             height="80%"
           />
         </b-col>
-        <b-col>
+        <b-col class="mt-2">
           <b-row>
             <h6>{{ instrumentoEncontrado.cantidadVendida }} vendidos</h6>
           </b-row>
@@ -39,15 +39,15 @@
               </h4>
             </div>
           </b-row>
-          <b-row>
-            <b-button href="/" variant="outline-primary"
-              >Agregar al carrito</b-button
-            >
-          </b-row>
         </b-col>
         <b-row class="ml-5 mr-5">
           <h4>Descripción: {{ instrumentoEncontrado.descripcion }}</h4>
         </b-row>
+      </b-row>
+      <b-row>
+        <b-button class="mx-auto" href="/productos" variant="outline-primary"
+          >Volver</b-button
+        >
       </b-row>
     </b-container>
   </div>
