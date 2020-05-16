@@ -167,6 +167,7 @@ export default {
       this.instrumento = {};
     },
     handleOk(bvModalEvt) {
+      this.loading = true;
       // Prevent modal from closing
       bvModalEvt.preventDefault();
       // Trigger submit handler
