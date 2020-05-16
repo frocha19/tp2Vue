@@ -1,26 +1,62 @@
 <template>
-  <div class="productos">
-    <b-container>
-      <b-card>
-        <div
-          class="cards"
-          v-for="instrumento in instrumentosData"
-          :key="instrumento.id"
-        >
-          <instrumento-item :instrumentoParam="instrumento"></instrumento-item>
-        </div>
-      </b-card>
-    </b-container>
+  <div>
+    <app-loading v-if="loading"></app-loading>
+    <div v-if="!loading" class="productos">
+      <b-container>
+        <b-card>
+          <div
+            class="cards animated fadeIn"
+            v-for="instrumento in instrumentosData"
+            :key="instrumento.id"
+          >
+            <instrumento-item
+              :instrumentoParam="instrumento"
+            ></instrumento-item>
+          </div>
+        </b-card>
+      </b-container>
+    </div>
   </div>
 </template>
+
+<style>
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.fast {
+  -webkit-animation-duration: 0.4s;
+  animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation-name: fadeIn;
+}
+</style>
+
 <script>
-// @ is an alias to /src
 import Instrumento from "@/components/Instrumento.vue";
+import Loading from "@/components/Loading.vue";
 
 export default {
   name: "Productos",
   components: {
-    "instrumento-item": Instrumento
+    "instrumento-item": Instrumento,
+    "app-loading": Loading
   },
   mounted() {
     this.getInstrumentos();
@@ -28,7 +64,7 @@ export default {
   data() {
     return {
       instrumentosData: [],
-      ids: []
+      loading: true
     };
   },
   methods: {
@@ -51,6 +87,7 @@ export default {
           .get()
           .then(doc => testCollection.push(doc.data()));
       });
+      this.loading = false;
       this.instrumentosData = testCollection;
     }
   }

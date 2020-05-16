@@ -10,6 +10,7 @@
           <b-nav-item href="/">Home</b-nav-item>
           <b-nav-item href="/productos">Productos</b-nav-item>
           <b-nav-item href="/ubicacion">Donde Estamos</b-nav-item>
+          <b-nav-item href="/abm">ABM</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
