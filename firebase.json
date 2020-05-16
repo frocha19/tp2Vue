@@ -1,0 +1,12 @@
+{
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "storage": {
+    "rules": "y"
+  },
+  "hosting": {
+    "site": "basiccrud-2719",
+    "public": "public"
+  }
+}
