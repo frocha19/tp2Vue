@@ -4,7 +4,7 @@
     <div v-if="!loading" class="productos">
       <b-container>
         <b-card>
-          <h1 v-if="empty">
+          <h1 class="animated fadeIn" v-if="empty">
             No se encontraron Instrumentos
           </h1>
           <div
@@ -96,7 +96,7 @@ export default {
         if (this.instrumentosData.length == 0) {
           this.empty = true;
         }
-      }, 2000);
+      }, 1000);
 
       this.loading = false;
       this.instrumentosData = testCollection;

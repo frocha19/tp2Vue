@@ -179,7 +179,7 @@ export default {
         }
       });
       this.instrumento.id = valor + 1;
-      this.instrumento.imagen = `nro${this.instrumento.id}.pn`;
+      this.instrumento.imagen = `nro${this.instrumento.id}.png`;
       await this.onUpload(this.instrumento.id);
       await this.$firebase
         .firestore()
