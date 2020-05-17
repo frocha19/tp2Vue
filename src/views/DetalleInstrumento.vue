@@ -4,11 +4,7 @@
     <b-container v-if="!loading" class="mt-5 tarjeta animated fadeIn">
       <b-row>
         <b-col class="mt-2">
-          <img
-            :src="'/images/' + instrumentoEncontrado.imagen"
-            width="80%"
-            height="80%"
-          />
+          <img :src="instrumentoEncontrado.imagen" width="80%" height="80%" />
         </b-col>
         <b-col class="mt-2">
           <b-row>

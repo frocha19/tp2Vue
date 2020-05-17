@@ -4,6 +4,9 @@
     <div v-if="!loading" class="productos">
       <b-container>
         <b-card>
+          <h1 v-if="empty">
+            No se encontraron Instrumentos
+          </h1>
           <div
             class="cards animated fadeIn"
             v-for="instrumento in instrumentosData"
@@ -65,7 +68,8 @@ export default {
     return {
       instrumentosData: [],
       ids: [],
-      loading: true
+      loading: true,
+      empty: false
     };
   },
   methods: {
@@ -88,6 +92,12 @@ export default {
           .get()
           .then(doc => testCollection.push(doc.data()));
       });
+      setTimeout(() => {
+        if (this.instrumentosData.length == 0) {
+          this.empty = true;
+        }
+      }, 2000);
+
       this.loading = false;
       this.instrumentosData = testCollection;
     }

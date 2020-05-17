@@ -20,7 +20,7 @@
                 <b-form-input
                   id="instrumento"
                   type="text"
-                  v-model="instrumento.intrumento"
+                  v-model="instrumento.instrumento"
                   placeholder="Instrumento"
                   title="Ingrese el nombre del instrumento..."
                   required
@@ -75,6 +75,9 @@
                   title="Ingrese la descripcion del instrumento..."
                   required
                 ></b-form-input>
+                <div id="image">
+                  <input type="file" @change="onFileSelected" required />
+                </div>
               </b-form-group>
             </form>
           </b-modal>
@@ -99,9 +102,6 @@
         :fields="fields"
         :items="instrumentosData"
       >
-        <b-tr>
-          <b-th colspan="2"><span class="sr-only">acc</span></b-th>
-        </b-tr>
       </b-table>
       <b-pagination
         v-model="currentPage"
@@ -116,6 +116,7 @@
 <style></style>
 
 <script>
+import firebase from "firebase";
 import Loading from "@/components/Loading.vue";
 export default {
   name: "DetalleInstrumento",
@@ -155,40 +156,31 @@ export default {
         costoEnvio: "",
         cantidadVendida: "",
         descripcion: ""
-      }
+      },
+      selectedFile: null,
+      UploadValue: 0,
+      picture: null
     };
   },
   methods: {
-    // checkFormValidity() {
-    //   const valid = this.$refs.form.checkValidity();
-    //   return valid;
-    // },
     resetModal() {
       this.instrumento = {};
     },
     handleOk(bvModalEvt) {
       this.loading = true;
-      // Prevent modal from closing
       bvModalEvt.preventDefault();
-      // Trigger submit handler
       this.handleSubmit();
     },
     async handleSubmit() {
       let valor = 0;
-      // Exit when the form isn't valid
-      //   if (!this.checkFormValidity()) {
-      //     return;
-      //   }
-      // Push the name to submitted names
-      // Hide the modal manually
-      this.instrumento.imagen = "nro1.jpg";
       this.instrumentosData.forEach(instru => {
         if (instru.id >= valor) {
           valor = instru.id;
-          console.log(valor);
         }
       });
-      this.instrumento.id = valor;
+      this.instrumento.id = valor + 1;
+      this.instrumento.imagen = `nro${this.instrumento.id}.pn`;
+      await this.onUpload(this.instrumento.id);
       await this.$firebase
         .firestore()
         .collection("instrumentosDB")
@@ -196,9 +188,9 @@ export default {
         .then(() => {
           this.$nextTick(() => {
             this.$bvModal.hide("modal-agregar");
-            this.$router.go();
           });
         });
+      setTimeout(() => this.$router.go(), 4000);
     },
     async getInstrumentos() {
       const testCollection = [];
@@ -221,6 +213,28 @@ export default {
       });
       this.loading = false;
       this.instrumentosData = testCollection;
+    },
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
+    },
+    async onUpload(valorId) {
+      const storageRef = firebase.storage().ref(`/images/nro${valorId}.png`);
+      const task = storageRef.put(this.selectedFile);
+      task.on(
+        "state_changed",
+        snapshot => {
+          let percentage =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.UploadValue = percentage;
+        },
+        error => console.log(error.message),
+        () => {
+          this.UploadValue = 100;
+          task.snapshot.ref.getDownloadURL().then(url => {
+            console.log(url);
+          });
+        }
+      );
     }
   },
   computed: {
