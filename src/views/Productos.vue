@@ -96,7 +96,7 @@ export default {
         if (this.instrumentosData.length == 0) {
           this.empty = true;
         }
-      }, 1000);
+      }, 2000);
 
       this.loading = false;
       this.instrumentosData = testCollection;

@@ -7,9 +7,7 @@
           '?alt=media'
       "
       img-left
-      img-width="20%"
-      img-height="20%"
-      class="mb-3"
+      img-width="26%"
     >
       <b-card-title
         :title="instrumentoParam.instrumento"
@@ -36,6 +34,7 @@
         :href="'/detalle/' + instrumentoParam.id"
         variant="primary"
         block
+        v-if="!instrumentoParam.disabled"
       >
         <b>Detalle</b>
       </b-button>

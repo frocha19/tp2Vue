@@ -7,7 +7,9 @@
         <b-button-group class="mx-auto">
           <b-button v-b-modal.modal-agregar variant="primary">Agregar</b-button>
           <b-button v-b-modal.modal-editar variant="warning">Editar</b-button>
-          <b-button v-b-modal.modal-eliminar variant="danger">Elimar</b-button>
+          <b-button v-b-modal.modal-eliminar variant="danger"
+            >Eliminar</b-button
+          >
           <b-modal
             id="modal-agregar"
             ref="modal"
@@ -83,9 +85,24 @@
           </b-modal>
           <b-modal id="modal-editar" title="Editar"></b-modal>
           <b-modal
+            size="xl"
             id="modal-eliminar"
-            title="Elimar"
-          ></b-modal> </b-button-group
+            title="Eliminar"
+            @show="resetModal"
+          >
+            <form ref="form2" @click="handleDel">
+              <b-form-select
+                v-model="selected"
+                :options="options"
+              ></b-form-select>
+              <div class="miniCard">
+                <instrumento-item
+                  v-if="selected != null"
+                  :instrumentoParam="selected"
+                ></instrumento-item>
+              </div>
+            </form>
+          </b-modal> </b-button-group
       ></b-row>
       <div>
         Sorting By: <b>{{ sortBy }}</b
@@ -113,14 +130,21 @@
   </div>
 </template>
 
-<style></style>
+<style>
+.minicard {
+  width: 80%;
+  margin: 0 auto;
+}
+</style>
 
 <script>
 import firebase from "firebase";
 import Loading from "@/components/Loading.vue";
+import Instrumento from "@/components/Instrumento.vue";
 export default {
   name: "DetalleInstrumento",
   components: {
+    "instrumento-item": Instrumento,
     "app-loading": Loading
   },
   mounted() {
@@ -128,6 +152,8 @@ export default {
   },
   data() {
     return {
+      selected: null,
+      options: [{ value: null, text: "Please select an option" }],
       title: "",
       sortBy: "id",
       sortDesc: false,
@@ -165,6 +191,24 @@ export default {
   methods: {
     resetModal() {
       this.instrumento = {};
+    },
+    handleDel(event) {
+      event.preventDefault();
+      this.handleDelete();
+    },
+    async handleDelete() {
+      console.log(this.selected);
+      await this.$firebase
+        .firestore()
+        .collection("instrumentosDB")
+        .where("id", "==", this.selected.id)
+        .delete()
+        .then(function() {
+          console.info("Registro borrado...");
+        })
+        .catch(function(error) {
+          console.error("Error removing document: ", error);
+        });
     },
     handleOk(bvModalEvt) {
       this.loading = true;
@@ -211,8 +255,9 @@ export default {
           .get()
           .then(doc => testCollection.push(doc.data()));
       });
-      this.loading = false;
       this.instrumentosData = testCollection;
+      setTimeout(() => this.rellenarList(), 1500);
+      this.loading = false;
     },
     onFileSelected(event) {
       this.selectedFile = event.target.files[0];
@@ -235,6 +280,12 @@ export default {
           });
         }
       );
+    },
+    rellenarList() {
+      this.instrumentosData.forEach(data => {
+        data.disabled = true;
+        this.options.push({ ["text"]: data.instrumento, ["value"]: data });
+      });
     }
   },
   computed: {
