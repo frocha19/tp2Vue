@@ -1,10 +1,10 @@
 # Trabajo Practico 2 Vue.js
 
 ## Integrantes
-*Astorga Nicolás,
-*Gutierrez Walter Julián,
-*Rocha Fernando,
-*Valenti Joel
+* Astorga Nicolás,
+* Gutierrez Walter Julián,
+* Rocha Fernando,
+* Valenti Joel
 
 ## Framework y Librerias usadas:
     VueJs
