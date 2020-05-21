@@ -62,7 +62,7 @@ export default {
     "app-loading": Loading
   },
   mounted() {
-    this.getInstrumentos();
+    this.inicio();
   },
   data() {
     return {
@@ -72,34 +72,9 @@ export default {
       empty: false
     };
   },
-  methods: {
-    async getInstrumentos() {
-      const testCollection = [];
-      await this.$firebase
-        .firestore()
-        .collection("instrumentosDB")
-        .get()
-        .then(data => {
-          data.forEach(doc => {
-            this.ids.push(doc.id);
-          });
-        });
-      await this.ids.forEach(id => {
-        this.$firebase
-          .firestore()
-          .collection("instrumentosDB")
-          .doc(id)
-          .get()
-          .then(doc => testCollection.push(doc.data()));
-      });
-      setTimeout(() => {
-        if (this.instrumentosData.length == 0) {
-          this.empty = true;
-        }
-      }, 2000);
-
+  methods:{
+    inicio(){
       this.loading = false;
-      this.instrumentosData = testCollection;
     }
   }
 };

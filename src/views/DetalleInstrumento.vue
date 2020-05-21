@@ -41,20 +41,17 @@
         </b-row>
       </b-row>
       <b-row>
-        <b-button class="mx-auto" href="/productos" variant="outline-primary"
-          >Volver</b-button
-        >
+        <b-button class="mx-auto" href="/productos" variant="outline-primary">Volver</b-button>
       </b-row>
     </b-container>
   </div>
 </template>
 <style>
 .envioGratis {
-  color: orange;
-}
-
-.envioPago {
   color: green;
+}
+.envioPago {
+  color: orange;
 }
 .tarjeta {
   background-color: cyan;
@@ -66,7 +63,6 @@
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
-
 .fast {
   -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
@@ -103,7 +99,7 @@ export default {
       loading: true
     };
   },
-  methods: {
+  /*methods: {
     async getInstrumentoXId() {
       let parametro = [];
       await this.$firebase
@@ -117,6 +113,6 @@ export default {
       this.loading = false;
       this.instrumentoEncontrado = parametro;
     }
-  }
+  }*/
 };
 </script>

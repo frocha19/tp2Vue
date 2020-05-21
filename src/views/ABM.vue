@@ -136,19 +136,16 @@
   margin: 0 auto;
 }
 </style>
-
 <script>
-import firebase from "firebase";
 import Loading from "@/components/Loading.vue";
 import Instrumento from "@/components/Instrumento.vue";
+import InstrumentoDataService from "@/service/InstrumentoDataService.js";
+
 export default {
   name: "DetalleInstrumento",
   components: {
     "instrumento-item": Instrumento,
     "app-loading": Loading
-  },
-  mounted() {
-    this.getInstrumentos();
   },
   data() {
     return {
@@ -188,110 +185,29 @@ export default {
       picture: null
     };
   },
-  methods: {
-    resetModal() {
-      this.instrumento = {};
-    },
-    handleDel(event) {
-      event.preventDefault();
-      this.handleDelete();
-    },
-    async handleDelete() {
-      console.log(this.selected);
-      await this.$firebase
-        .firestore()
-        .collection("instrumentosDB")
-        .where("id", "==", this.selected.id)
-        .delete()
-        .then(function() {
-          console.info("Registro borrado...");
-        })
-        .catch(function(error) {
-          console.error("Error removing document: ", error);
-        });
-    },
-    handleOk(bvModalEvt) {
-      this.loading = true;
-      bvModalEvt.preventDefault();
-      this.handleSubmit();
-    },
-    async handleSubmit() {
-      let valor = 0;
-      this.instrumentosData.forEach(instru => {
-        if (instru.id >= valor) {
-          valor = instru.id;
-        }
-      });
-      this.instrumento.id = valor + 1;
-      this.instrumento.imagen = `nro${this.instrumento.id}.png`;
-      await this.onUpload(this.instrumento.id);
-      await this.$firebase
-        .firestore()
-        .collection("instrumentosDB")
-        .add(this.instrumento)
-        .then(() => {
-          this.$nextTick(() => {
-            this.$bvModal.hide("modal-agregar");
-          });
-        });
-      setTimeout(() => this.$router.go(), 4000);
-    },
-    async getInstrumentos() {
-      const testCollection = [];
-      await this.$firebase
-        .firestore()
-        .collection("instrumentosDB")
-        .get()
-        .then(data => {
-          data.forEach(doc => {
-            this.ids.push(doc.id);
-          });
-        });
-      await this.ids.forEach(id => {
-        this.$firebase
-          .firestore()
-          .collection("instrumentosDB")
-          .doc(id)
-          .get()
-          .then(doc => testCollection.push(doc.data()));
-      });
-      this.instrumentosData = testCollection;
-      setTimeout(() => this.rellenarList(), 1500);
-      this.loading = false;
-    },
-    onFileSelected(event) {
-      this.selectedFile = event.target.files[0];
-    },
-    async onUpload(valorId) {
-      const storageRef = firebase.storage().ref(`/images/nro${valorId}.png`);
-      const task = storageRef.put(this.selectedFile);
-      task.on(
-        "state_changed",
-        snapshot => {
-          let percentage =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          this.UploadValue = percentage;
-        },
-        error => console.log(error.message),
-        () => {
-          this.UploadValue = 100;
-          task.snapshot.ref.getDownloadURL().then(url => {
-            console.log(url);
-          });
-        }
-      );
-    },
-    rellenarList() {
-      this.instrumentosData.forEach(data => {
-        data.disabled = true;
-        this.options.push({ ["text"]: data.instrumento, ["value"]: data });
-      });
-    }
+  mounted(){
+    this.inicio();
+    this.retrieveTutorials();
   },
-  computed: {
-    rows() {
-      return this.instrumentosData.length;
-    }
+  methods:{
+    inicio(){
+      this.loading=false;
+    },
+    retrieveTutorials() {
+      InstrumentoDataService.getAll()
+        .then(response => {
+          this.instrumentosData = response.data;
+          console.log(response.data);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    refreshList() {
+      this.retrieveTutorials();
+      this.currentTutorial = null;
+      this.currentIndex = -1;
+    },
   }
 };
 </script>

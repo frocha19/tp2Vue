@@ -1,11 +1,16 @@
 # Trabajo Practico 2 Vue.js
 
+## Integrantes
+*Astorga Nicolás,
+*Gutierrez Walter Julián,
+*Rocha Fernando,
+*Valenti Joel
+
 ## Framework y Librerias usadas:
     VueJs
     BootstrapVue
-    Firebase
-    Firestore
     Font Awesome
+	Axios
 
 ## Ejecutar el siguiente comando para crear el node_module:
     npm install
