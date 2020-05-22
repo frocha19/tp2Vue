@@ -185,29 +185,73 @@ export default {
       picture: null
     };
   },
-  mounted(){
-    this.inicio();
-    this.retrieveTutorials();
+  mounted() {
+    this.getInstrumentos();
   },
-  methods:{
-    inicio(){
-      this.loading=false;
-    },
-    retrieveTutorials() {
-      InstrumentoDataService.getAll()
+  methods: {
+    async getInstrumentos() {
+      this.loading = false;
+      await InstrumentoDataService.getAll()
         .then(response => {
           this.instrumentosData = response.data;
-          console.log(response.data);
         })
         .catch(e => {
           console.log(e);
         });
     },
     refreshList() {
-      this.retrieveTutorials();
+      this.getInstrumentos();
       this.currentTutorial = null;
       this.currentIndex = -1;
     },
+    // METODOS ANTERIORES
+    resetModal() {
+      this.instrumento = {};
+    },
+    handleDel(event) {
+      event.preventDefault();
+      this.handleDelete();
+    },
+    async handleDelete() {
+      console.log(this.selected);
+      await InstrumentoDataService.delete(this.selected.id)
+        .then(response => {
+          this.instrumentosData = response.data;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    handleOk(bvModalEvt) {
+      this.loading = true;
+      bvModalEvt.preventDefault();
+      this.handleSubmit();
+    },
+    async handleSubmit() {
+      const formData = new FormData();
+      formData.append("file", this.selectedFile);
+      this.instrumento.imagen = this.selectedFile.name;
+      await InstrumentoDataService.create(this.instrumento, this.selectedFile)
+        .then(() => this.$bvModal.hide("modal-agregar"))
+        .catch(e => {
+          console.log(e);
+        });
+      setTimeout(() => this.$router.go(), 2000);
+    },
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
+    },
+    rellenarList() {
+      this.instrumentosData.forEach(data => {
+        data.disabled = true;
+        this.options.push({ ["text"]: data.instrumento, ["value"]: data });
+      });
+    }
+  },
+  computed: {
+    rows() {
+      return this.instrumentosData.length;
+    }
   }
 };
 </script>

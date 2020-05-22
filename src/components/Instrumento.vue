@@ -1,14 +1,6 @@
 <template>
   <div class="mt-4">
-    <b-card
-      :img-src="
-        'https://firebasestorage.googleapis.com/v0/b/basiccrud-8a755.appspot.com/o/images%2F' +
-          instrumentoParam.imagen +
-          '?alt=media'
-      "
-      img-left
-      img-width="26%"
-    >
+    <b-card :img-src="instrumentoParam.imagen" img-left img-width="26%">
       <b-card-title
         :title="instrumentoParam.instrumento"
         class="titulo"

@@ -1,12 +1,18 @@
 <template>
   <div>
     <app-loading v-if="loading"></app-loading>
+    <b-container>
+      <div
+        v-if="instrumentosData.length == 0"
+        class="alert alert-success mt-5 text-center animated fadeIn"
+        role="alert"
+      >
+        <h4 class="alert-heading">No se encontraron Registros</h4>
+      </div>
+    </b-container>
     <div v-if="!loading" class="productos">
-      <b-container>
+      <b-container v-if="instrumentosData.length > 0">
         <b-card>
-          <h1 class="animated fadeIn" v-if="empty">
-            No se encontraron Instrumentos
-          </h1>
           <div
             class="cards animated fadeIn"
             v-for="instrumento in instrumentosData"
@@ -54,6 +60,7 @@
 <script>
 import Instrumento from "@/components/Instrumento.vue";
 import Loading from "@/components/Loading.vue";
+import InstrumentoDataService from "@/service/InstrumentoDataService.js";
 
 export default {
   name: "Productos",
@@ -62,7 +69,7 @@ export default {
     "app-loading": Loading
   },
   mounted() {
-    this.inicio();
+    this.getInstrumentos();
   },
   data() {
     return {
@@ -72,9 +79,21 @@ export default {
       empty: false
     };
   },
-  methods:{
-    inicio(){
+  methods: {
+    getInstrumentos() {
       this.loading = false;
+      InstrumentoDataService.getAll()
+        .then(response => {
+          this.instrumentosData = response.data;
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    refreshList() {
+      this.getInstrumentos();
+      this.currentTutorial = null;
+      this.currentIndex = -1;
     }
   }
 };

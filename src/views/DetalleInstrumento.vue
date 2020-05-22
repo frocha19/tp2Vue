@@ -41,7 +41,9 @@
         </b-row>
       </b-row>
       <b-row>
-        <b-button class="mx-auto" href="/productos" variant="outline-primary">Volver</b-button>
+        <b-button class="mx-auto" href="/productos" variant="outline-primary"
+          >Volver</b-button
+        >
       </b-row>
     </b-container>
   </div>
@@ -85,6 +87,7 @@
 </style>
 <script>
 import Loading from "@/components/Loading.vue";
+import InstrumentoDataService from "@/service/InstrumentoDataService.js";
 export default {
   name: "DetalleInstrumento",
   components: {
@@ -99,20 +102,17 @@ export default {
       loading: true
     };
   },
-  /*methods: {
+  methods: {
     async getInstrumentoXId() {
-      let parametro = [];
-      await this.$firebase
-        .firestore()
-        .collection("instrumentosDB")
-        .where("id", "==", this.$route.params.id)
-        .get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(doc => (parametro = doc.data()));
-        });
       this.loading = false;
-      this.instrumentoEncontrado = parametro;
+      await InstrumentoDataService.get(this.$route.params.id)
+        .then(response => {
+          this.instrumentoEncontrado = response.data;
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
-  }*/
+  }
 };
 </script>

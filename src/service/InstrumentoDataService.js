@@ -8,19 +8,19 @@ class InstrumentoDataService {
   }
 
   get(id) {
-    return http.get(this._url+id);
+    return http.get(this._url + id);
   }
 
-  create(data) {
-    return http.post(this._url, data);
+  create(data, imagen) {
+    return http.post(this._url, data, imagen);
   }
 
   update(id, data) {
-    return http.put(this._url+id, data);
+    return http.put(this._url + id, data);
   }
 
   delete(id) {
-    return http.delete(this._url+id);
+    return http.delete(this._url + id);
   }
 }
 
