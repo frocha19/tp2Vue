@@ -89,8 +89,9 @@
             id="modal-eliminar"
             title="Eliminar"
             @show="resetModal"
+            @ok="handleDel"
           >
-            <form ref="form2" @click="handleDel">
+            <form ref="form2">
               <b-form-select
                 v-model="selected"
                 :options="options"
@@ -198,6 +199,7 @@ export default {
         .catch(e => {
           console.log(e);
         });
+      this.rellenarList();
     },
     refreshList() {
       this.getInstrumentos();
@@ -209,18 +211,21 @@ export default {
       this.instrumento = {};
     },
     handleDel(event) {
+      this.loading = true;
       event.preventDefault();
       this.handleDelete();
     },
     async handleDelete() {
       console.log(this.selected);
       await InstrumentoDataService.delete(this.selected.id)
-        .then(response => {
-          this.instrumentosData = response.data;
+        .then(() => {
+          alert("Registro Eliminado");
+          this.$bvModal.hide("modal-eliminar");
         })
         .catch(e => {
           console.log(e);
         });
+      this.$router.go();
     },
     handleOk(bvModalEvt) {
       this.loading = true;
