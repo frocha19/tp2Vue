@@ -36,7 +36,7 @@ public class InstrumentoController {
 		this.service = service;
 	}
 
-	@PostMapping
+	/*@PostMapping
 	public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file)
 			throws IllegalStateException, IOException {
 		try {
@@ -45,7 +45,7 @@ public class InstrumentoController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 					.body("{\"message\": \"Error ocurrido en uploadFile\"}");
 		}
-	}
+	}*/
 
 	@GetMapping("/")
 	@Transactional
@@ -69,13 +69,22 @@ public class InstrumentoController {
 
 	@PostMapping("/")
 	@Transactional
+	public ResponseEntity post(@RequestBody InstrumentoDTO dto,@RequestParam("file") MultipartFile file) {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.save(dto,file));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error ocurrido en Post\"}");
+		}
+	}
+	/*@PostMapping("/")
+	@Transactional
 	public ResponseEntity post(@RequestBody InstrumentoDTO dto) {
 		try {
 			return ResponseEntity.status(HttpStatus.OK).body(service.save(dto));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error ocurrido en Post\"}");
 		}
-	}
+	}*/
 
 	@PutMapping("/{id}")
 	@Transactional

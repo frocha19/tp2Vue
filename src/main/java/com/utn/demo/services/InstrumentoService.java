@@ -22,7 +22,8 @@ public class InstrumentoService {
 	}
 	
 	public String uploadFile(MultipartFile file) throws IllegalStateException, IOException {
-		File archivo = new File("C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.6.1.RELEASE\\TP2React\\src\\main\\resources\\static\\img\\"+file.getOriginalFilename());
+		File archivo = new File("C:\\Users\\f_erc\\Documents\\Imagenes"+file.getOriginalFilename());
+		//File archivo = new File("C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.6.1.RELEASE\\TP2React\\src\\main\\resources\\static\\img\\"+file.getOriginalFilename());
 		file.transferTo(archivo);
 		return archivo.getAbsolutePath();
 	}
@@ -77,6 +78,28 @@ public class InstrumentoService {
 	}
 	//Save
 	@Transactional
+	public InstrumentoDTO save(InstrumentoDTO dto, MultipartFile file) throws Exception{
+		
+		Instrumento entidad = new Instrumento();
+		entidad.setInstrumento(dto.getInstrumento());
+		entidad.setMarca(dto.getMarca());
+		entidad.setModelo(dto.getModelo());
+		entidad.setPrecio(dto.getPrecio());
+		entidad.setCostoEnvio(dto.getCostoEnvio());
+		entidad.setCantidadVendida(dto.getCantidadVendida());
+		entidad.setImagen(this.uploadFile(file));
+		entidad.setDescripcion(dto.getDescripcion());
+		try {
+			
+			entidad = repository.save(entidad);
+			dto.setId(entidad.getId());
+			
+			return dto;
+		}catch(Exception e) {
+			throw new Exception();
+		}
+	}
+	/*@Transactional
 	public InstrumentoDTO save(InstrumentoDTO dto) throws Exception{
 		
 		Instrumento entidad = new Instrumento();
@@ -97,7 +120,7 @@ public class InstrumentoService {
 		}catch(Exception e) {
 			throw new Exception();
 		}
-	}
+	}*/
 	//Update
 	@Transactional
 	public InstrumentoDTO update(long id, InstrumentoDTO dto) throws Exception{
