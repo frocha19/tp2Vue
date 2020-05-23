@@ -187,6 +187,9 @@ export default {
     };
   },
   mounted() {
+    alert(
+      "Arreglar el Size de la imagen, este error tira el Spring: The field file exceeds its maximum permitted size of 1048576 bytes. Y las validaciones"
+    );
     this.getInstrumentos();
   },
   methods: {
@@ -206,7 +209,6 @@ export default {
       this.currentTutorial = null;
       this.currentIndex = -1;
     },
-    // METODOS ANTERIORES
     resetModal() {
       this.instrumento = {};
     },
@@ -216,7 +218,6 @@ export default {
       this.handleDelete();
     },
     async handleDelete() {
-      console.log(this.selected);
       await InstrumentoDataService.delete(this.selected.id)
         .then(() => {
           alert("Registro Eliminado");
@@ -233,18 +234,36 @@ export default {
       this.handleSubmit();
     },
     async handleSubmit() {
-      const formData = new FormData();
-      formData.append("file", this.selectedFile);
-      this.instrumento.imagen = this.selectedFile.name;
-      await InstrumentoDataService.create(this.instrumento, this.selectedFile)
-        .then(() => this.$bvModal.hide("modal-agregar"))
+      this.upload();
+      this.instrumento.imagen = "/images/" + this.selectedFile.name;
+      await InstrumentoDataService.create(this.instrumento)
+        .then(() => {
+          alert("Registro Agregado");
+          this.$bvModal.hide("modal-agregar");
+        })
         .catch(e => {
           console.log(e);
         });
-      setTimeout(() => this.$router.go(), 2000);
+      this.$router.go();
     },
     onFileSelected(event) {
       this.selectedFile = event.target.files[0];
+    },
+    async upload() {
+      let formData = new FormData();
+      formData.append("file", this.selectedFile);
+      await fetch("http://localhost:9000/api/v1/instrumento/uploadImg", {
+        mode: "no-cors",
+        method: "POST",
+        body: formData
+      })
+        .then(response => {
+          this.instrumento.imagen = response;
+          return response;
+        })
+        .catch(e => {
+          console.log(e);
+        });
     },
     rellenarList() {
       this.instrumentosData.forEach(data => {
