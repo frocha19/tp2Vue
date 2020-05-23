@@ -21,8 +21,9 @@ public class InstrumentoService {
 		this.repository = repository;
 	}
 	
+	@Transactional
 	public String uploadFile(MultipartFile file) throws IllegalStateException, IOException {
-		File archivo = new File("C:\\Users\\f_erc\\Documents\\Imagenes"+file.getOriginalFilename());
+		File archivo = new File("C:\\Users\\f_erc\\Downloads\\tp2Vue-frontend\\public\\images\\"+file.getOriginalFilename());
 		//File archivo = new File("C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.6.1.RELEASE\\TP2React\\src\\main\\resources\\static\\img\\"+file.getOriginalFilename());
 		file.transferTo(archivo);
 		return archivo.getAbsolutePath();
@@ -78,8 +79,8 @@ public class InstrumentoService {
 	}
 	//Save
 	@Transactional
-	public InstrumentoDTO save(InstrumentoDTO dto, MultipartFile file) throws Exception{
-		
+	public InstrumentoDTO save(InstrumentoDTO dto) throws Exception{
+		//public InstrumentoDTO save(InstrumentoDTO dto, MultipartFile file) throws Exception{
 		Instrumento entidad = new Instrumento();
 		entidad.setInstrumento(dto.getInstrumento());
 		entidad.setMarca(dto.getMarca());
@@ -87,13 +88,12 @@ public class InstrumentoService {
 		entidad.setPrecio(dto.getPrecio());
 		entidad.setCostoEnvio(dto.getCostoEnvio());
 		entidad.setCantidadVendida(dto.getCantidadVendida());
-		entidad.setImagen(this.uploadFile(file));
+		//entidad.setImagen(this.uploadFile(file));
+		entidad.setImagen(dto.getImagen());
 		entidad.setDescripcion(dto.getDescripcion());
 		try {
-			
 			entidad = repository.save(entidad);
 			dto.setId(entidad.getId());
-			
 			return dto;
 		}catch(Exception e) {
 			throw new Exception();
@@ -150,6 +150,10 @@ public class InstrumentoService {
 	public boolean delete(long id) throws Exception{
 		try {
 			if(repository.existsById(id)) {
+				Instrumento i = repository.findById(id).get();
+				//File imagen = new File("C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.6.1.RELEASE\\TP2React\\src\\main\\resources\\static\\img\\"+i.getImagen().substring(8));
+				File imagen = new File("C:\\Users\\f_erc\\Downloads\\tp2Vue-frontend\\public\\images\\"+i.getImagen().substring(8));
+				imagen.delete();
 				repository.deleteById(id);
 				return true;
 			}else {

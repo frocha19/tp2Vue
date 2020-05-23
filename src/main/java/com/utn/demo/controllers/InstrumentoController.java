@@ -24,8 +24,7 @@ import com.utn.demo.dtos.InstrumentoDTO;
 import com.utn.demo.services.InstrumentoService;
 
 @RestController
-@CrossOrigin(origins = "*", methods = { RequestMethod.GET, RequestMethod.DELETE, RequestMethod.POST,
-		RequestMethod.PUT })
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping(path = "api/v1/instrumento")
 public class InstrumentoController {
 
@@ -46,6 +45,17 @@ public class InstrumentoController {
 					.body("{\"message\": \"Error ocurrido en uploadFile\"}");
 		}
 	}*/
+	@PostMapping("/uploadImg")
+	@Transactional
+	public ResponseEntity uploadFile(@RequestParam("file") MultipartFile file)
+			throws IllegalStateException, IOException {
+		try {
+			return ResponseEntity.status(HttpStatus.OK).body(service.uploadFile(file));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("{\"message\": \"Error ocurrido en uploadFile\"}");
+		}
+	}
 
 	@GetMapping("/")
 	@Transactional
@@ -67,7 +77,7 @@ public class InstrumentoController {
 		}
 	}
 
-	@PostMapping("/")
+	/*@PostMapping("/")
 	@Transactional
 	public ResponseEntity post(@RequestBody InstrumentoDTO dto,@RequestParam("file") MultipartFile file) {
 		try {
@@ -75,8 +85,8 @@ public class InstrumentoController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error ocurrido en Post\"}");
 		}
-	}
-	/*@PostMapping("/")
+	}*/
+	@PostMapping("/")
 	@Transactional
 	public ResponseEntity post(@RequestBody InstrumentoDTO dto) {
 		try {
@@ -84,7 +94,7 @@ public class InstrumentoController {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\": \"Error ocurrido en Post\"}");
 		}
-	}*/
+	}
 
 	@PutMapping("/{id}")
 	@Transactional
