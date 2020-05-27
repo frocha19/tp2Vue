@@ -23,10 +23,16 @@ public class InstrumentoService {
 	
 	@Transactional
 	public String uploadFile(MultipartFile file) throws IllegalStateException, IOException {
-		File archivo = new File("C:\\Users\\f_erc\\Downloads\\tp2Vue-frontend\\public\\images\\"+file.getOriginalFilename());
-		//File archivo = new File("C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.6.1.RELEASE\\TP2React\\src\\main\\resources\\static\\img\\"+file.getOriginalFilename());
-		file.transferTo(archivo);
-		return archivo.getAbsolutePath();
+		File archivo = new File("C:\\Users\\user\\Documents\\work-spaces\\Vue\\tp2Vue\\public\\images\\"+file.getOriginalFilename());
+		if (archivo.exists()) {
+		    System.out.println("Ya existe esta imagen");
+		    return archivo.getAbsolutePath();
+		}
+		else {
+		    System.out.println("No existe esta imagen");
+		    file.transferTo(archivo);
+			return archivo.getAbsolutePath();
+		}
 	}
 	
 	//FindAll
@@ -152,7 +158,7 @@ public class InstrumentoService {
 			if(repository.existsById(id)) {
 				Instrumento i = repository.findById(id).get();
 				//File imagen = new File("C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.6.1.RELEASE\\TP2React\\src\\main\\resources\\static\\img\\"+i.getImagen().substring(8));
-				File imagen = new File("C:\\Users\\f_erc\\Downloads\\tp2Vue-frontend\\public\\images\\"+i.getImagen().substring(8));
+				File imagen = new File("C:\\Users\\user\\Documents\\work-spaces\\Vue\\tp2Vue\\public\\images\\"+i.getImagen().substring(8));
 				imagen.delete();
 				repository.deleteById(id);
 				return true;

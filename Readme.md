@@ -3,3 +3,7 @@
 	<version>2.2.0.RELEASE</version>
 ## Linea 18
 	<java.version>11</java.version>
+
+#Properties
+* localhost:3306 
+* server.port=9000
