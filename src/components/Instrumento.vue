@@ -7,10 +7,7 @@
       ></b-card-title>
       <b-card-text>
         <h5 :precio="instrumentoParam.precio">
-          Precio: {{ instrumentoParam.precio }}
-        </h5>
-        <h5 :cantidadVendida="instrumentoParam.cantidadVendida">
-          Cant. Vendida: {{ instrumentoParam.cantidadVendida }}
+          Precio: ${{ instrumentoParam.precio }}
         </h5>
         <h5 v-if="instrumentoParam.costoEnvio == 'G'" class="envioGratis">
           <img :src="'/images/camion.png'" width="4%" class="mb-1" />
@@ -21,6 +18,9 @@
             instrumentoParam.costoEnvio
           }}
         </h5>
+        <h6 :cantidadVendida="instrumentoParam.cantidadVendida">
+          {{ instrumentoParam.cantidadVendida }} vendidos
+        </h6>
       </b-card-text>
       <b-button
         :href="'/detalle/' + instrumentoParam.id"

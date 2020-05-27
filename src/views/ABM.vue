@@ -8,6 +8,7 @@
         @click="resetModal"
         v-b-modal.modal-prevent-closing>Agregar</b-button>
       <br />
+      <br>
       <b-modal id="modal-prevent-closing" ref="modal" title="Instrumentos" hide-footer>
         <b-form ref="form" @submit="onSubmit">
           <b-form-group id="input-group-1">
@@ -83,23 +84,7 @@
         </b-form>
       </b-modal>
 
-      <b-col lg="7" class="my-2">
-        <b-form-group
-          label="Buscar"
-          label-cols-sm="1"
-          label-align-sm="left"
-          label-size="large"
-          label-for="filterInput"
-          class="mb-0"
-        >
-          <b-input-group size="large">
-            <b-form-input v-model="filter" type="search" id="filterInput" placeholder="Buscar..."></b-form-input>
-            <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''">Limpiar</b-button>
-            </b-input-group-append>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
+  
       <b-table
         id="my-table"
         head-variant="dark"
@@ -182,8 +167,8 @@ export default {
       perPage: 5,
       currentPage: 1,
       instrumentosData: [],
-      filter: null,
-      filterOn: [],
+      //filter: null,
+      //filterOn: [],
       ids: [],
       selectedFile: null,
       UploadValue: 0,
@@ -192,7 +177,7 @@ export default {
   },
   mounted() {
     this.getInstrumentos();
-    this.totalRows = this.instrumentosData.length;
+    //this.totalRows = this.instrumentosData.length;
   },
   methods: {
     getInstrumentos() {
@@ -353,10 +338,10 @@ export default {
           console.log(e);
         });
     },
-    onFiltered: filteredItems => {
+    /*onFiltered: filteredItems => {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
-    }
+    }*/
   }
 };
 </script>

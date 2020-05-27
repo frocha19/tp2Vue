@@ -1,30 +1,28 @@
-<template
-  ><div>
-    <app-loading v-if="loading"></app-loading>
-    <b-container v-if="!loading" class="mt-5 tarjeta animated fadeIn">
+<template>
+    <b-container  class="mt-5 tarjeta">
       <b-row>
         <b-col class="mt-2">
           <img :src="instrumentoEncontrado.imagen" width="80%" height="80%" />
         </b-col>
         <b-col class="mt-2">
           <b-row>
-            <h6>{{ instrumentoEncontrado.cantidadVendida }} vendidos</h6>
+            <h5>{{instrumentoEncontrado.cantidadVendida}} vendidos</h5>
+          </b-row>
+          <b-row style="margin-top: 1%">
+            <h1>{{instrumentoEncontrado.instrumento}}</h1>
           </b-row>
           <b-row>
-            <h1>{{ instrumentoEncontrado.instrumento }}</h1>
+            <h2>${{instrumentoEncontrado.precio}}</h2>
           </b-row>
           <b-row>
-            <h2>$ {{ instrumentoEncontrado.precio }}</h2>
+            <h4>Marca: {{instrumentoEncontrado.marca}}</h4>
           </b-row>
           <b-row>
-            <h4>Marca: {{ instrumentoEncontrado.marca }}</h4>
-          </b-row>
-          <b-row>
-            <h4>Modelo: {{ instrumentoEncontrado.modelo }}</h4>
+            <h4>Modelo: {{instrumentoEncontrado.modelo}}</h4>
           </b-row>
           <b-row>
             <div v-if="instrumentoEncontrado.costoEnvio == 'G'">
-              <img :src="'/images/camion.png'" width="12%" class="mb-1" />
+              <img :src="'/images/camion.png'" width="13%" class="mb-1" />
               <span class="envioGratis">Envío gratis a todo el país</span>
             </div>
             <div v-else>
@@ -35,18 +33,18 @@
               </h4>
             </div>
           </b-row>
+          <br>
+          <b-row>
+        <b-button class="btn" variant="primary" href="/">Agregar al carrito</b-button>
+        <b-button style="margin-left: 1%" href="/productos" variant="secondary">Volver</b-button>
+      </b-row>
         </b-col>
-        <b-row class="ml-5 mr-5">
+      </b-row>
+      <br>
+      <b-row>
           <h4>Descripción: {{ instrumentoEncontrado.descripcion }}</h4>
         </b-row>
-      </b-row>
-      <b-row>
-        <b-button class="mx-auto" href="/productos" variant="outline-primary"
-          >Volver</b-button
-        >
-      </b-row>
     </b-container>
-  </div>
 </template>
 <style>
 .envioGratis {
@@ -56,56 +54,26 @@
   color: orange;
 }
 .tarjeta {
-  background-color: cyan;
   border-radius: 20px;
-}
-.animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-.fast {
-  -webkit-animation-duration: 0.4s;
-  animation-duration: 0.4s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.fadeIn {
-  animation-name: fadeIn;
+  margin-bottom: 1%;
 }
 </style>
 <script>
-import Loading from "@/components/Loading.vue";
 import InstrumentoDataService from "@/service/InstrumentoDataService.js";
+
 export default {
   name: "DetalleInstrumento",
-  components: {
-    "app-loading": Loading
-  },
   mounted() {
     this.getInstrumentoXId();
   },
   data() {
     return {
-      instrumentoEncontrado: [],
-      loading: true
+      instrumentoEncontrado: []
     };
   },
   methods: {
     async getInstrumentoXId() {
-      this.loading = false;
-      await InstrumentoDataService.get(this.$route.params.id)
+      await InstrumentoDataService.getOne(this.$route.params.id)
         .then(response => {
           this.instrumentoEncontrado = response.data;
         })
